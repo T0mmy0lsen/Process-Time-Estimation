@@ -1,7 +1,7 @@
 from datetime import datetime
 
 import sql
-from Relation import Relation
+from objs.Relation import Relation
 
 
 class Request:
@@ -49,12 +49,19 @@ class Requests:
     def r(self):
         return self._r
 
+    @property
+    def fillables(self):
+        return self._fillables
+
     def get_between(self, t1, t2):
-        query = "SELECT {} FROM `request` WHERE receivedDate >= %s and receivedDate < %s".format(
-            ', '.join(["`{}`".format(e) for e in self._fillables]))
-        for el in sql.SQL().all(query, [t1, t2]):
+        for el in self.get_between_sql(t1, t2):
             request = Request()
             for idx, e in enumerate(self._fillables):
                 setattr(request, e, el[idx])
             self._r.append(request)
         return self
+
+    def get_between_sql(self, t1, t2):
+        query = "SELECT {} FROM `request` WHERE receivedDate >= %s and receivedDate < %s".format(
+            ', '.join(["`{}`".format(e) for e in self._fillables]))
+        return sql.SQL().all(query, [t1, t2])
