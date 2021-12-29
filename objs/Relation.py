@@ -1,5 +1,5 @@
 import sql
-from _Object import Object
+from Object import Object
 
 
 class Relation:

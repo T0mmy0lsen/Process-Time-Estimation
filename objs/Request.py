@@ -1,7 +1,7 @@
 from datetime import datetime
 
 import sql
-from _Relation import Relation
+from Relation import Relation
 
 
 class Request:
