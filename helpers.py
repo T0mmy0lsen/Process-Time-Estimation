@@ -3,16 +3,19 @@ import math
 
 class Job:
 
-    def __init__(self, w, p):
+    def __init__(self, w, p, d=1):
         self.w = w      # Weight
         self.p = p      # Processing time
         self.id = 0     # Identifier
         self.C = 2      # Completion time
-        self.d = 1      # Due date
+        self.d = d      # Due date
         self.r = 0.05   # Rate
 
     def set_id(self, i):
         self.id = i
+
+    def set_completion(self, current_timestamp):
+        self.C = current_timestamp + self.p
 
     def get_ratio(self):
         return self.w / self.p
@@ -94,6 +97,19 @@ class Jobs:
             sum(job.w for job in jobs_r) / sum(job.p for job in jobs_r)
         )
 
+    @staticmethod
+    # Simply sum op all process time
+    def get_current_timestamp(jobs, timestamp=0):
+        for j in jobs:
+            timestamp = timestamp + j.p
+        return timestamp
+
+    @staticmethod
+    def set_completion_time(J, Js):
+        t = Jobs.get_current_timestamp(J)
+        for j in Js:
+            j.set_completion(t)
+
 
 class Chains:
 
@@ -118,7 +134,7 @@ class Chains:
         return empty
 
     def no_successors(self):
-        return [e[-1] for e in self.c]
+        return [e[0] for e in self.c if len(e) > 0]
 
 
 class Algorithms:
@@ -175,8 +191,18 @@ class Algorithms:
     # Algorithm 3.2.1 Lowest Cost Last
     def lowest_cost_last(self):
         J = []
-        Jc = [e.id for e in self.jobs]
-        Js = self.chains.no_successors()
+        while not self.chains.empty():
+            # Get Jobs with no successors
+            Js_ids = self.chains.no_successors()
+            Js = self.get_jobs_from_identifiers(Js_ids)
+            # Set completion time relative to the J's
+            Jobs.set_completion_time(J, Js)
+            # Sort by lambda function and append the first element
+            Js_sorted = sorted(Js, key=lambda x: x.get_lateness(), reverse=False)
+            J.append(Js_sorted[0])
+            for idx, c in enumerate(self.chains.c):
+                if Js_sorted[0].id in self.chains.c[idx]:
+                    self.chains.c[idx].remove(Js_sorted[0].id)
 
         return self.finalize(J, 'Lowest Cost Last')
 
@@ -184,11 +210,12 @@ class Algorithms:
 def main():
 
     chains = Chains([[1, 2, 3, 4], [5, 6, 7]])
-    jobs = Jobs([Job(6, 3), Job(18, 6), Job(12, 6), Job(8, 5), Job(8, 4), Job(17, 8), Job(18, 10)])
+    jobs = Jobs([Job(w=6, p=3, d=3), Job(18, 6), Job(12, 6), Job(8, 5), Job(8, 4), Job(17, 8), Job(18, 10)])
 
-    a1 = Algorithms(chains, jobs).weighted_shortest_processing_time()
-    a2 = Algorithms(chains, jobs).total_weighted_completion_time_and_chains()
-    a3 = Algorithms(chains, jobs).weighted_discounted_shortest_processing_time()
+    # a1 = Algorithms(chains, jobs).weighted_shortest_processing_time()
+    # a2 = Algorithms(chains, jobs).total_weighted_completion_time_and_chains()
+    # a3 = Algorithms(chains, jobs).weighted_discounted_shortest_processing_time()
+    # a4 = Algorithms(chains, jobs).lowest_cost_last()
 
 
 

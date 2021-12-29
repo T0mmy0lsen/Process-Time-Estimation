@@ -4,14 +4,18 @@ import pymysql as pymysql
 class SQL:
 
     # Return all results
-    def all(self, sql):
-        self._cursor.execute(sql)
+    def all(self, sql, values=None):
+        if values is None:
+            values = []
+        self._cursor.execute(sql, values)
         result = self._cursor.fetchall()
         return result
 
     # Return first row in result
-    def one(self, sql):
-        self._cursor.execute(sql)
+    def one(self, sql, values=None):
+        if values is None:
+            values = []
+        self._cursor.execute(sql, values)
         result = self._cursor.fetchone()
         return result
 
