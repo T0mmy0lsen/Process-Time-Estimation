@@ -1,0 +1,1 @@
+{"model_name": "6_newsgrp_largeclass", "model_file_path": "model/20newsgroup/model_6_01.hdf5", "model_hyper_parameters": "model/20newsgroup/model_6_01.json", "model_train_parameters": "model/20newsgroup/model_6_01_meta.json", "seed": 55, "test_data_proportion": 0.3, "batch_size": 128, "num_epochs": 20, "validation_split": 0.1, "optimizer": "rmsprop", "learning_rate": 0.01}

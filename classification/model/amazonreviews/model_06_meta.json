@@ -1,0 +1,1 @@
+{"model_name": "model_with_tanh_activation", "model_file_path": "model/amazonreviews/model_06.hdf5", "model_hyper_parameters": "model/amazonreviews/model_06.json", "model_train_parameters": "model/amazonreviews/model_06_meta.json", "seed": 55, "test_data_proportion": 0.3, "batch_size": 64, "num_epochs": 1, "validation_split": 0.05, "optimizer": "rmsprop", "learning_rate": 0.001}

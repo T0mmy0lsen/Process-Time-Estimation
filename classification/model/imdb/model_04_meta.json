@@ -1,0 +1,1 @@
+{"model_name": "imdb_relu_activation", "model_file_path": "model/imdb/model_04.hdf5", "model_hyper_parameters": "model/imdb/model_04.json", "model_train_parameters": "model/imdb/model_04_meta.json", "seed": 55, "test_data_proportion": 0.3, "batch_size": 128, "num_epochs": 20, "validation_split": 0.05, "optimizer": "rmsprop", "learning_rate": 0.001}
